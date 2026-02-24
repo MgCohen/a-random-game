@@ -1,0 +1,16 @@
+{
+    "name": "CardMatch.Navigation",
+    "rootNamespace": "CardMatch.Navigation",
+    "references": [
+        "UnityEngine"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
