@@ -9,13 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5343d0da2de2fd449275800fd0e2c99, type: 3}
+  m_Script: {fileID: 11500000, guid: 4eb919557e4c21641bf4e94463ddb5d9, type: 3}
   m_Name: Level
   m_EditorClassIdentifier: 
+  levelId: 1
   config:
     Layout:
-      Rows: 0
-      Columns: 0
+      Rows: 2
+      Columns: 2
     Scoring:
-      BaseMatchPoints: 0
-      ComboBonusPerLevel: 0
+      BaseMatchPoints: 1
+      ComboBonusPerLevel: 2
+  cardBack: {fileID: 1605104938, guid: 1d8c4a520321c32499a64751d6d7899b, type: 3}
+  cardFrontBase: {fileID: -330424980, guid: 1d8c4a520321c32499a64751d6d7899b, type: 3}
+  cardFrontColors:
+  - {r: 1, g: 0.25943398, b: 0.25943398, a: 1}
+  - {r: 0.45602277, g: 1, b: 0.2588235, a: 1}
+  - {r: 0.2588235, g: 0.7408622, b: 1, a: 1}
+  - {r: 1, g: 0.2588235, b: 0.65220493, a: 1}
