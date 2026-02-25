@@ -1,0 +1,21 @@
+{
+    "name": "CardMatch.Levels.Editor",
+    "rootNamespace": "CardMatch.Levels.Editor",
+    "references": [
+        "CardMatch.CardMatch",
+        "CardMatch.Levels",
+        "UnityEditor",
+        "UnityEngine"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
