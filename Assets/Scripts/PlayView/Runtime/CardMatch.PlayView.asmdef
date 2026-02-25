@@ -1,0 +1,17 @@
+{
+    "name": "CardMatch.PlayView",
+    "rootNamespace": "CardMatch.PlayView",
+    "references": [
+        "UnityEngine",
+        "CardMatch.Navigation"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

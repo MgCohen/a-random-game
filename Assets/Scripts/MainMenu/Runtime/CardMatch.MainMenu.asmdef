@@ -1,0 +1,21 @@
+{
+    "name": "CardMatch.MainMenu",
+    "rootNamespace": "CardMatch.MainMenu",
+    "references": [
+        "UnityEngine.UI",
+        "CardMatch.CardMatch",
+        "CardMatch.Navigation",
+        "CardMatch.Levels",
+        "CardMatch.PlayView",
+        "CardMatch.Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

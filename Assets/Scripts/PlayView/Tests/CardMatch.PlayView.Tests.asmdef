@@ -1,0 +1,23 @@
+{
+    "name": "CardMatch.PlayView.Tests",
+    "rootNamespace": "CardMatch.PlayView.Tests",
+    "references": [
+        "CardMatch.PlayView",
+        "CardMatch.Navigation",
+        "UnityEngine"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
