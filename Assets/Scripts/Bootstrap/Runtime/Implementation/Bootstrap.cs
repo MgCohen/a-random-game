@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using CardMatch.CardMatch;
-using CardMatch.Config;
+using CardMatch.Levels;
 using CardMatch.Navigation;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace CardMatch.Bootstrap
         private INavigation navigation;
         private IMatchEvents matchEvents;
         private Match match;
-        private ScoreService scoreService;
+        private IScoreService scoreService;
         private Type initialViewType;
 
         public INavigation Navigation
@@ -46,7 +46,7 @@ namespace CardMatch.Bootstrap
             }
         }
 
-        public ScoreService ScoreService
+        public IScoreService ScoreService
         {
             get
             {
@@ -129,7 +129,7 @@ namespace CardMatch.Bootstrap
             GameState state = BuildGameState(config);
             var matchEventsService = new TypedEventService();
             Match builtMatch = new Match(state, matchEventsService);
-            var builtScoreService = new ScoreService(state, config.Scoring, matchEventsService);
+            IScoreService builtScoreService = new ScoreService(state, config.Scoring, matchEventsService);
             matchEvents = matchEventsService;
             match = builtMatch;
             scoreService = builtScoreService;

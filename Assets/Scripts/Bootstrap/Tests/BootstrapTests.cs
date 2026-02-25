@@ -1,6 +1,7 @@
 using System.Reflection;
 using CardMatch.Bootstrap;
-using CardMatch.Config;
+using CardMatch.CardMatch;
+using CardMatch.Levels;
 using CardMatch.Navigation;
 using NUnit.Framework;
 using UnityEngine;
