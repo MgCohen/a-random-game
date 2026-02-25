@@ -28,14 +28,14 @@ namespace CardMatch.Navigation
             }
         }
 
-        public NavigationController(params IView[] viewArray)
+        public NavigationController(params IView[] views)
         {
             contextToView = new Dictionary<Type, IView>();
             stack = new Stack<IView>();
-            Build(viewArray);
+            Build(views);
         }
 
-        public void Build(params IView[] viewArray)
+        private void Build(params IView[] viewArray)
         {
             for (int i = 0; i < viewArray.Length; i++)
             {
@@ -44,14 +44,11 @@ namespace CardMatch.Navigation
                 {
                     continue;
                 }
-                if (view is IViewWithContext withContext)
-                {
-                    contextToView[withContext.ContextType] = view;
-                }
+                contextToView[view.ContextType] = view;
             }
         }
 
-        public void Open(IViewContext context)
+        public void Open<T>(T context) where T: IViewContext
         {
             if (context == null)
             {
@@ -65,10 +62,7 @@ namespace CardMatch.Navigation
             {
                 return;
             }
-            if (nextView is IViewWithContext withContext)
-            {
-                withContext.SetContext(context);
-            }
+            nextView.SetContext(context);
             HideCurrentIfAny();
             nextView.Show();
             stack.Push(nextView);

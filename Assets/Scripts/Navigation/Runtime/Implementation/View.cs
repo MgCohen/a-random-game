@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CardMatch.Navigation
@@ -5,15 +6,10 @@ namespace CardMatch.Navigation
     public abstract class View : MonoBehaviour, IView
     {
         private ViewStatus status = ViewStatus.Closed;
-
         public ViewStatus Status => status;
 
-        protected INavigation Navigation { get; private set; }
-
-        public void SetNavigation(INavigation navigation)
-        {
-            Navigation = navigation;
-        }
+        public abstract Type ContextType { get; }
+        public abstract void SetContext(IViewContext context);
 
         public void Show()
         {
@@ -38,23 +34,17 @@ namespace CardMatch.Navigation
 
         protected virtual void OnShow()
         {
+
         }
 
         protected virtual void OnHide()
         {
+
         }
 
         protected virtual void OnClose()
         {
-        }
 
-        protected void GoTo(IViewContext context)
-        {
-            if (Navigation == null)
-            {
-                return;
-            }
-            Navigation.Open(context);
         }
     }
 }

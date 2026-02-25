@@ -149,7 +149,7 @@ namespace CardMatch.Navigation.Tests
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewWithContext));
             Assert.That(viewWithContext.Status, Is.EqualTo(ViewStatus.Open));
-            Assert.That(viewWithContext.ReceivedContext, Is.SameAs(context));
+            Assert.That(viewWithContext.Context, Is.SameAs(context));
         }
 
         [Test]
@@ -168,7 +168,7 @@ namespace CardMatch.Navigation.Tests
         {
             var viewWithContext = new FakeViewWithContext();
             INavigation nav = new NavigationController(viewWithContext);
-            nav.Open((IViewContext)null);
+            nav.Open<FakeViewContext>(null);
             Assert.That(nav.StackCount, Is.EqualTo(0));
             Assert.That(nav.CurrentView, Is.Null);
         }
@@ -181,16 +181,24 @@ namespace CardMatch.Navigation.Tests
         private sealed class FakeContextB : IViewContext { }
         private sealed class FakeContextC : IViewContext { }
 
-        private sealed class FakeViewWithContext : IViewWithContext
+        private abstract class FakeViewBase<TContext> : IView<TContext> where TContext : IViewContext
         {
             public ViewStatus Status { get; private set; } = ViewStatus.Closed;
-            public IViewContext ReceivedContext { get; private set; }
+            public Type ContextType => typeof(TContext);
+            public TContext Context { get; private set; }
 
-            public Type ContextType => typeof(FakeViewContext);
-
-            public void SetContext(object context)
+            public void SetContext(TContext context)
             {
-                ReceivedContext = context as IViewContext;
+                Context = context;
+            }
+
+            public void SetContext(IViewContext context)
+            {
+                if (context is not TContext typedContext)
+                {
+                    throw new ArgumentException($"Expected context of type {typeof(TContext).Name}.");
+                }
+                SetContext(typedContext);
             }
 
             public void Show()
@@ -209,70 +217,20 @@ namespace CardMatch.Navigation.Tests
             }
         }
 
-        private sealed class FakeViewA : IViewWithContext
+        private sealed class FakeViewWithContext : FakeViewBase<FakeViewContext>
         {
-            public ViewStatus Status { get; private set; } = ViewStatus.Closed;
-            public Type ContextType => typeof(FakeContextA);
-            public void SetContext(object context) { }
-
-            public void Show()
-            {
-                Status = ViewStatus.Open;
-            }
-
-            public void Hide()
-            {
-                Status = ViewStatus.Hidden;
-            }
-
-            public void Close()
-            {
-                Status = ViewStatus.Closed;
-            }
         }
 
-        private sealed class FakeViewB : IViewWithContext
+        private sealed class FakeViewA : FakeViewBase<FakeContextA>
         {
-            public ViewStatus Status { get; private set; } = ViewStatus.Closed;
-            public Type ContextType => typeof(FakeContextB);
-            public void SetContext(object context) { }
-
-            public void Show()
-            {
-                Status = ViewStatus.Open;
-            }
-
-            public void Hide()
-            {
-                Status = ViewStatus.Hidden;
-            }
-
-            public void Close()
-            {
-                Status = ViewStatus.Closed;
-            }
         }
 
-        private sealed class FakeViewC : IViewWithContext
+        private sealed class FakeViewB : FakeViewBase<FakeContextB>
         {
-            public ViewStatus Status { get; private set; } = ViewStatus.Closed;
-            public Type ContextType => typeof(FakeContextC);
-            public void SetContext(object context) { }
+        }
 
-            public void Show()
-            {
-                Status = ViewStatus.Open;
-            }
-
-            public void Hide()
-            {
-                Status = ViewStatus.Hidden;
-            }
-
-            public void Close()
-            {
-                Status = ViewStatus.Closed;
-            }
+        private sealed class FakeViewC : FakeViewBase<FakeContextC>
+        {
         }
 
     }
