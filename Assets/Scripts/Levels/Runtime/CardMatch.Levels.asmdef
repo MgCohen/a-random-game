@@ -3,6 +3,7 @@
     "rootNamespace": "CardMatch.Levels",
     "references": [
         "CardMatch.CardMatch",
+        "CardMatch.Persistence",
         "CardMatch.Utility"
     ],
     "includePlatforms": [],

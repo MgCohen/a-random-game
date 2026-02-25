@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using CardMatch.CardMatch;
+using CardMatch.Persistence;
 using UnityEngine;
 
 namespace CardMatch.Levels
@@ -7,12 +9,34 @@ namespace CardMatch.Levels
     public class LevelController : ILevelController
     {
         private readonly LevelRegistry registry;
-        private readonly LevelCompletionState state;
+        private readonly Dictionary<string, LevelProgressState> stateCache = new Dictionary<string, LevelProgressState>();
+        private readonly IPersistence persistence;
 
-        public LevelController(LevelRegistry registry, LevelCompletionState state)
+        public LevelController(LevelRegistry registry, IPersistence persistence)
         {
             this.registry = registry;
-            this.state = state;
+            this.persistence = persistence;
+            Level[] levels = registry?.Levels;
+            LevelCompletionState loaded = persistence?.Load<LevelCompletionState>();
+
+            if (loaded != null && (loaded.UnlockedLevelIds.Count > 0 || loaded.CompletedLevelIds.Count > 0))
+            {
+                foreach (string id in loaded.CompletedLevelIds)
+                {
+                    if (!string.IsNullOrEmpty(id))
+                        stateCache[id] = LevelProgressState.Completed;
+                }
+                foreach (string id in loaded.UnlockedLevelIds)
+                {
+                    if (!string.IsNullOrEmpty(id) && !stateCache.ContainsKey(id))
+                        stateCache[id] = LevelProgressState.Unlocked;
+                }
+            }
+            else
+            {
+                if (levels != null && levels.Length > 0 && !string.IsNullOrEmpty(levels[0].LevelId))
+                    stateCache[levels[0].LevelId] = LevelProgressState.Unlocked;
+            }
         }
 
         public IReadOnlyList<Level> GetLevels()
@@ -40,8 +64,8 @@ namespace CardMatch.Levels
             {
                 return false;
             }
-            LevelProgressState progressState = state.GetState(level.LevelId);
-            return progressState == LevelProgressState.Unlocked || progressState == LevelProgressState.Completed;
+            return stateCache.TryGetValue(level.LevelId, out LevelProgressState pState)
+                && (pState == LevelProgressState.Unlocked || pState == LevelProgressState.Completed);
         }
 
         public bool IsCompleted(Level level)
@@ -50,21 +74,34 @@ namespace CardMatch.Levels
             {
                 return false;
             }
-            return state.GetState(level.LevelId) == LevelProgressState.Completed;
+            return stateCache.TryGetValue(level.LevelId, out LevelProgressState pState)
+                && pState == LevelProgressState.Completed;
         }
 
         public void MarkCompleted(Level level)
         {
             if (level == null) return;
-            state.SetState(level.LevelId, LevelProgressState.Completed);
-            UnlockNextLevelIfAny(level);
+            stateCache[level.LevelId] = LevelProgressState.Completed;
+            Level nextLevel = GetNextLevel(level);
+            if (nextLevel != null && !IsUnlocked(nextLevel))
+            {
+                stateCache[nextLevel.LevelId] = LevelProgressState.Unlocked;
+            }
+            LevelCompletionState toSave = BuildCompletionState();
+            persistence?.Save(toSave);
         }
 
-        private void UnlockNextLevelIfAny(Level level)
+        private LevelCompletionState BuildCompletionState()
         {
-            Level nextLevel = GetNextLevel(level);
-            if (nextLevel == null) return;
-            state.SetState(nextLevel.LevelId, LevelProgressState.Unlocked);
+            var toSave = new LevelCompletionState();
+            foreach (KeyValuePair<string, LevelProgressState> kv in stateCache)
+            {
+                if (kv.Value == LevelProgressState.Unlocked)
+                    toSave.UnlockedLevelIds.Add(kv.Key);
+                else if (kv.Value == LevelProgressState.Completed)
+                    toSave.CompletedLevelIds.Add(kv.Key);
+            }
+            return toSave;
         }
 
         private Level GetNextLevel(Level level)
