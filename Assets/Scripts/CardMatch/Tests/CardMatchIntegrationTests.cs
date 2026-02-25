@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using CardMatch.CardMatch;
-using CardMatch.Config;
 using NUnit.Framework;
 
 namespace CardMatch.Tests

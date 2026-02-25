@@ -1,8 +1,6 @@
-using CardMatch.Config;
-
 namespace CardMatch.CardMatch
 {
-    public class ScoreService
+    public class ScoreService : IScoreService
     {
         private GameState state;
         private ScoreRules rules;
