@@ -13,10 +13,11 @@ namespace CardMatch.Bootstrap.Tests
         {
             var bootstrapObject = new GameObject("bootstrap");
             var bootstrap = bootstrapObject.AddComponent<Bootstrap>();
-            SetPrivateField(bootstrap, "viewPrefabs", new View[0]);
+            SetPrivateField(bootstrap, "views", new View[0]);
             bootstrap.Build();
-            Assert.That(bootstrap.Navigation, Is.Not.Null);
-            Assert.That(bootstrap.Navigation.StackCount, Is.EqualTo(0));
+            INavigation navigation = GetPrivateField<INavigation>(bootstrap, "navigation");
+            Assert.That(navigation, Is.Not.Null);
+            Assert.That(navigation.StackCount, Is.EqualTo(0));
             Object.DestroyImmediate(bootstrapObject);
         }
 
@@ -25,6 +26,13 @@ namespace CardMatch.Bootstrap.Tests
             FieldInfo field = target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(field, Is.Not.Null);
             field.SetValue(target, value);
+        }
+
+        private static T GetPrivateField<T>(object target, string name)
+        {
+            FieldInfo field = target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null);
+            return (T)field.GetValue(target);
         }
     }
 }
