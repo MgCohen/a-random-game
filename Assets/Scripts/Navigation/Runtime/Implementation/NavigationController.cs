@@ -5,7 +5,7 @@ namespace CardMatch.Navigation
 {
     public class NavigationController : INavigation
     {
-        private readonly Dictionary<Type, IView> views;
+        private readonly Dictionary<Type, IView> contextToView;
         private readonly Stack<IView> stack;
 
         public int StackCount
@@ -30,7 +30,7 @@ namespace CardMatch.Navigation
 
         public NavigationController(params IView[] viewArray)
         {
-            views = new Dictionary<Type, IView>();
+            contextToView = new Dictionary<Type, IView>();
             stack = new Stack<IView>();
             Build(viewArray);
         }
@@ -44,14 +44,20 @@ namespace CardMatch.Navigation
                 {
                     continue;
                 }
-                Type viewType = view.GetType();
-                views[viewType] = view;
+                if (view is IViewWithContext withContext)
+                {
+                    contextToView[withContext.ContextType] = view;
+                }
             }
         }
 
-        public void Open<T>() where T : IView
+        public void Open(IViewContext context)
         {
-            if (!TryGetView<T>(out IView nextView))
+            if (context == null)
+            {
+                return;
+            }
+            if (!contextToView.TryGetValue(context.GetType(), out IView nextView))
             {
                 return;
             }
@@ -59,14 +65,13 @@ namespace CardMatch.Navigation
             {
                 return;
             }
+            if (nextView is IViewWithContext withContext)
+            {
+                withContext.SetContext(context);
+            }
             HideCurrentIfAny();
             nextView.Show();
             stack.Push(nextView);
-        }
-
-        public void GoTo<T>() where T : IView
-        {
-            Open<T>();
         }
 
         public void GoBack()
@@ -76,12 +81,6 @@ namespace CardMatch.Navigation
                 return;
             }
             PopCurrentAndShowPrevious();
-        }
-
-        private bool TryGetView<T>(out IView nextView) where T : IView
-        {
-            Type viewType = typeof(T);
-            return views.TryGetValue(viewType, out nextView);
         }
 
         private bool IsCurrentView(IView view)

@@ -1,3 +1,4 @@
+using System;
 using CardMatch.Navigation;
 using NUnit.Framework;
 
@@ -24,7 +25,7 @@ namespace CardMatch.Navigation.Tests
         {
             var viewA = new FakeViewA();
             INavigation nav = new NavigationController(viewA);
-            nav.Open<FakeViewA>();
+            nav.Open(new FakeContextA());
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
             Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
@@ -36,8 +37,8 @@ namespace CardMatch.Navigation.Tests
             var viewA = new FakeViewA();
             var viewB = new FakeViewB();
             INavigation nav = new NavigationController(viewA, viewB);
-            nav.Open<FakeViewA>();
-            nav.Open<FakeViewB>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
             Assert.That(nav.StackCount, Is.EqualTo(2));
             Assert.That(nav.CurrentView, Is.SameAs(viewB));
             Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Hidden));
@@ -50,8 +51,8 @@ namespace CardMatch.Navigation.Tests
             var viewA = new FakeViewA();
             var viewB = new FakeViewB();
             INavigation nav = new NavigationController(viewA, viewB);
-            nav.Open<FakeViewA>();
-            nav.Open<FakeViewB>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
             nav.GoBack();
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
@@ -64,7 +65,7 @@ namespace CardMatch.Navigation.Tests
         {
             var viewA = new FakeViewA();
             INavigation nav = new NavigationController(viewA);
-            nav.Open<FakeViewA>();
+            nav.Open(new FakeContextA());
             nav.GoBack();
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
@@ -72,24 +73,24 @@ namespace CardMatch.Navigation.Tests
         }
 
         [Test]
-        public void Open_SameTypeTwice_DoesNotPushAgain_StackCountStaysOne()
+        public void Open_SameContextTwice_DoesNotPushAgain_StackCountStaysOne()
         {
             var viewA = new FakeViewA();
             INavigation nav = new NavigationController(viewA);
-            nav.Open<FakeViewA>();
-            nav.Open<FakeViewA>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextA());
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
             Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
         }
 
         [Test]
-        public void Open_WhenTypeNotRegistered_StackUnchanged()
+        public void Open_WhenContextTypeNotRegistered_StackUnchanged()
         {
             var viewA = new FakeViewA();
             INavigation nav = new NavigationController(viewA);
-            nav.Open<FakeViewA>();
-            nav.Open<FakeViewB>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
             Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
@@ -100,19 +101,19 @@ namespace CardMatch.Navigation.Tests
         {
             var viewA = new FakeViewA();
             INavigation nav = new NavigationController(viewA, null);
-            nav.Open<FakeViewA>();
+            nav.Open(new FakeContextA());
             Assert.That(nav.StackCount, Is.EqualTo(1));
             Assert.That(nav.CurrentView, Is.SameAs(viewA));
         }
 
         [Test]
-        public void GoTo_BehavesLikeOpen_StackCountAndStatusCorrect()
+        public void Open_TwoContexts_StackCountTwo_SecondIsCurrent_FirstHidden()
         {
             var viewA = new FakeViewA();
             var viewB = new FakeViewB();
             INavigation nav = new NavigationController(viewA, viewB);
-            nav.GoTo<FakeViewA>();
-            nav.GoTo<FakeViewB>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
             Assert.That(nav.StackCount, Is.EqualTo(2));
             Assert.That(nav.CurrentView, Is.SameAs(viewB));
             Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Hidden));
@@ -126,9 +127,9 @@ namespace CardMatch.Navigation.Tests
             var viewB = new FakeViewB();
             var viewC = new FakeViewC();
             INavigation nav = new NavigationController(viewA, viewB, viewC);
-            nav.Open<FakeViewA>();
-            nav.Open<FakeViewB>();
-            nav.Open<FakeViewC>();
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
+            nav.Open(new FakeContextC());
             nav.GoBack();
             nav.GoBack();
             Assert.That(nav.StackCount, Is.EqualTo(1));
@@ -138,9 +139,59 @@ namespace CardMatch.Navigation.Tests
             Assert.That(viewC.Status, Is.EqualTo(ViewStatus.Closed));
         }
 
-        private sealed class FakeViewA : IView
+        [Test]
+        public void Open_WithContext_ResolvesView_SetsContext_StackCountOne_CurrentViewOpen()
+        {
+            var context = new FakeViewContext();
+            var viewWithContext = new FakeViewWithContext();
+            INavigation nav = new NavigationController(viewWithContext);
+            nav.Open(context);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewWithContext));
+            Assert.That(viewWithContext.Status, Is.EqualTo(ViewStatus.Open));
+            Assert.That(viewWithContext.ReceivedContext, Is.SameAs(context));
+        }
+
+        [Test]
+        public void Open_WithContext_WhenNoViewForContext_StackUnchanged()
+        {
+            var viewA = new FakeViewA();
+            INavigation nav = new NavigationController(viewA);
+            var context = new FakeViewContext();
+            nav.Open(context);
+            Assert.That(nav.StackCount, Is.EqualTo(0));
+            Assert.That(nav.CurrentView, Is.Null);
+        }
+
+        [Test]
+        public void Open_WithNullContext_DoesNothing()
+        {
+            var viewWithContext = new FakeViewWithContext();
+            INavigation nav = new NavigationController(viewWithContext);
+            nav.Open((IViewContext)null);
+            Assert.That(nav.StackCount, Is.EqualTo(0));
+            Assert.That(nav.CurrentView, Is.Null);
+        }
+
+        private sealed class FakeViewContext : IViewContext
+        {
+        }
+
+        private sealed class FakeContextA : IViewContext { }
+        private sealed class FakeContextB : IViewContext { }
+        private sealed class FakeContextC : IViewContext { }
+
+        private sealed class FakeViewWithContext : IViewWithContext
         {
             public ViewStatus Status { get; private set; } = ViewStatus.Closed;
+            public IViewContext ReceivedContext { get; private set; }
+
+            public Type ContextType => typeof(FakeViewContext);
+
+            public void SetContext(object context)
+            {
+                ReceivedContext = context as IViewContext;
+            }
 
             public void Show()
             {
@@ -158,9 +209,11 @@ namespace CardMatch.Navigation.Tests
             }
         }
 
-        private sealed class FakeViewB : IView
+        private sealed class FakeViewA : IViewWithContext
         {
             public ViewStatus Status { get; private set; } = ViewStatus.Closed;
+            public Type ContextType => typeof(FakeContextA);
+            public void SetContext(object context) { }
 
             public void Show()
             {
@@ -178,9 +231,33 @@ namespace CardMatch.Navigation.Tests
             }
         }
 
-        private sealed class FakeViewC : IView
+        private sealed class FakeViewB : IViewWithContext
         {
             public ViewStatus Status { get; private set; } = ViewStatus.Closed;
+            public Type ContextType => typeof(FakeContextB);
+            public void SetContext(object context) { }
+
+            public void Show()
+            {
+                Status = ViewStatus.Open;
+            }
+
+            public void Hide()
+            {
+                Status = ViewStatus.Hidden;
+            }
+
+            public void Close()
+            {
+                Status = ViewStatus.Closed;
+            }
+        }
+
+        private sealed class FakeViewC : IViewWithContext
+        {
+            public ViewStatus Status { get; private set; } = ViewStatus.Closed;
+            public Type ContextType => typeof(FakeContextC);
+            public void SetContext(object context) { }
 
             public void Show()
             {

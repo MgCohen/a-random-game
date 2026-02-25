@@ -3,54 +3,27 @@ using System.Collections.Generic;
 using System.Reflection;
 using CardMatch.CardMatch;
 using CardMatch.Levels;
+using CardMatch.MainMenu;
 using CardMatch.Navigation;
+using CardMatch.Persistence;
 using UnityEngine;
-
 
 namespace CardMatch.Bootstrap
 {
     public class Bootstrap : MonoBehaviour
     {
-        [SerializeField] private Level level;
+        [SerializeField] private LevelRegistry levelRegistry;
         [SerializeField] private View[] viewPrefabs;
         [SerializeField] private Transform viewRoot;
-        [SerializeField] private int[] shuffledCardIds;
 
+        private IPersistence persistence;
         private INavigation navigation;
-        private IMatchEvents matchEvents;
-        private Match match;
-        private IScoreService scoreService;
-        private Type initialViewType;
 
         public INavigation Navigation
         {
             get
             {
                 return navigation;
-            }
-        }
-
-        public IMatchEvents MatchEvents
-        {
-            get
-            {
-                return matchEvents;
-            }
-        }
-
-        public Match Match
-        {
-            get
-            {
-                return match;
-            }
-        }
-
-        public IScoreService ScoreService
-        {
-            get
-            {
-                return scoreService;
             }
         }
 
@@ -62,15 +35,13 @@ namespace CardMatch.Bootstrap
         public void Build()
         {
             INavigation builtNavigation = BuildNavigation();
-            BuildCardMatch();
-            OpenInitialView(builtNavigation, initialViewType);
+            OpenInitialView();
         }
 
         private INavigation BuildNavigation()
         {
             IView[] instantiatedViews = InstantiateViews();
             var builtNavigation = new NavigationController(instantiatedViews);
-            initialViewType = GetInitialViewType(instantiatedViews);
             BindNavigationToViews(builtNavigation, instantiatedViews);
             InitializeViews(instantiatedViews);
             navigation = builtNavigation;
@@ -123,84 +94,15 @@ namespace CardMatch.Bootstrap
             }
         }
 
-        private void BuildCardMatch()
+        private void OpenInitialView()
         {
-            LevelConfig config = GetLevelConfig();
-            GameState state = BuildGameState(config);
-            var matchEventsService = new TypedEventService();
-            Match builtMatch = new Match(state, matchEventsService);
-            IScoreService builtScoreService = new ScoreService(state, config.Scoring, matchEventsService);
-            matchEvents = matchEventsService;
-            match = builtMatch;
-            scoreService = builtScoreService;
-        }
-
-        private LevelConfig GetLevelConfig()
-        {
-            if (level != null && level.Config != null)
-            {
-                return level.Config;
-            }
-            return new LevelConfig();
-        }
-
-        private GameState BuildGameState(LevelConfig config)
-        {
-            var state = new GameState();
-            state.Layout = config.Layout;
-            state.Cards = BuildCards(config.Layout);
-            state.FlippedCards = new List<Card>();
-            state.Score = 0;
-            state.Round = 0;
-            state.Combo = 0;
-            return state;
-        }
-
-        private Dictionary<int, Card> BuildCards(LayoutConfig layout)
-        {
-            int slotCount = GetSlotCount(layout);
-            if (slotCount <= 0)
-            {
-                return new Dictionary<int, Card>();
-            }
-            if (shuffledCardIds == null || shuffledCardIds.Length != slotCount)
-            {
-                return new Dictionary<int, Card>();
-            }
-            var cards = new Dictionary<int, Card>(slotCount);
-            for (int i = 0; i < slotCount; i++)
-            {
-                cards[i] = new Card(shuffledCardIds[i], CardState.Hidden);
-            }
-            return cards;
-        }
-
-        private static int GetSlotCount(LayoutConfig layout)
-        {
-            if (layout == null)
-            {
-                return 0;
-            }
-            return layout.Rows * layout.Columns;
-        }
-
-        private void OpenInitialView(INavigation builtNavigation, Type viewType)
-        {
-            if (builtNavigation == null || viewType == null)
+            if (navigation == null || levelRegistry == null)
             {
                 return;
             }
-            if (builtNavigation.CurrentView != null)
-            {
-                return;
-            }
-            MethodInfo openMethod = typeof(INavigation).GetMethod("Open");
-            if (openMethod == null)
-            {
-                return;
-            }
-            MethodInfo genericMethod = openMethod.MakeGenericMethod(viewType);
-            genericMethod.Invoke(builtNavigation, null);
+            ILevelController levelController = new LevelController(levelRegistry, persistence);
+            var context = new MainMenuViewContext(levelController, navigation);
+            navigation.Open(context);
         }
 
         private static Type GetInitialViewType(IView[] views)
@@ -215,15 +117,6 @@ namespace CardMatch.Bootstrap
                 return null;
             }
             return firstView.GetType();
-        }
-
-        private void OnDestroy()
-        {
-            if (scoreService == null)
-            {
-                return;
-            }
-            scoreService.Dispose();
         }
     }
 }

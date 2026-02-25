@@ -48,13 +48,13 @@ namespace CardMatch.Navigation
         {
         }
 
-        protected void GoTo<T>() where T : IView
+        protected void GoTo(IViewContext context)
         {
             if (Navigation == null)
             {
                 return;
             }
-            Navigation.Open<T>();
+            Navigation.Open(context);
         }
     }
 }
