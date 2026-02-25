@@ -5,37 +5,63 @@ namespace CardMatch.Navigation
 {
     public class NavigationController : INavigation
     {
-        private readonly Dictionary<Type, IView> views = new Dictionary<Type, IView>();
-        private readonly Stack<IView> stack = new Stack<IView>();
+        private readonly Dictionary<Type, IView> views;
+        private readonly Stack<IView> stack;
 
-        public int StackCount => stack.Count;
+        public int StackCount
+        {
+            get
+            {
+                return stack.Count;
+            }
+        }
 
-        public IView CurrentView => stack.Count > 0 ? stack.Peek() : null;
+        public IView CurrentView
+        {
+            get
+            {
+                if (stack.Count == 0)
+                {
+                    return null;
+                }
+                return stack.Peek();
+            }
+        }
 
         public NavigationController(params IView[] viewArray)
         {
+            views = new Dictionary<Type, IView>();
+            stack = new Stack<IView>();
+            Build(viewArray);
+        }
+
+        public void Build(params IView[] viewArray)
+        {
             for (int i = 0; i < viewArray.Length; i++)
             {
-                IView v = viewArray[i];
-                if (v == null) continue;
-                Type key = v.GetType();
-                views[key] = v;
+                IView view = viewArray[i];
+                if (view == null)
+                {
+                    continue;
+                }
+                Type viewType = view.GetType();
+                views[viewType] = view;
             }
         }
 
         public void Open<T>() where T : IView
         {
-            if (!TryGetView<T>(out IView next))
+            if (!TryGetView<T>(out IView nextView))
             {
                 return;
             }
-            if (IsCurrent(next))
+            if (IsCurrentView(nextView))
             {
                 return;
             }
             HideCurrentIfAny();
-            next.Show();
-            stack.Push(next);
+            nextView.Show();
+            stack.Push(nextView);
         }
 
         public void GoTo<T>() where T : IView
@@ -52,16 +78,15 @@ namespace CardMatch.Navigation
             PopCurrentAndShowPrevious();
         }
 
-        private bool TryGetView<T>(out IView next) where T : IView
+        private bool TryGetView<T>(out IView nextView) where T : IView
         {
-            Type key = typeof(T);
-            return views.TryGetValue(key, out next);
+            Type viewType = typeof(T);
+            return views.TryGetValue(viewType, out nextView);
         }
 
-        private bool IsCurrent(IView view)
+        private bool IsCurrentView(IView view)
         {
-            bool hasAny = stack.Count > 0;
-            if (!hasAny)
+            if (stack.Count == 0)
             {
                 return false;
             }
@@ -74,8 +99,8 @@ namespace CardMatch.Navigation
             {
                 return;
             }
-            IView current = stack.Peek();
-            current.Hide();
+            IView currentView = stack.Peek();
+            currentView.Hide();
         }
 
         private bool CanGoBack()
@@ -85,10 +110,10 @@ namespace CardMatch.Navigation
 
         private void PopCurrentAndShowPrevious()
         {
-            IView current = stack.Pop();
-            current.Close();
-            IView previous = stack.Peek();
-            previous.Show();
+            IView currentView = stack.Pop();
+            currentView.Close();
+            IView previousView = stack.Peek();
+            previousView.Show();
         }
     }
 }

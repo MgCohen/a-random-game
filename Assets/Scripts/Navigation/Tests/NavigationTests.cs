@@ -197,5 +197,6 @@ namespace CardMatch.Navigation.Tests
                 Status = ViewStatus.Closed;
             }
         }
+
     }
 }
