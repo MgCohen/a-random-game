@@ -2,10 +2,18 @@ using UnityEngine;
 
 namespace CardMatch.Audio
 {
-    public class AudioService : MonoBehaviour
+    public class AudioService : MonoBehaviour, IAudioService
     {
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
+
+        public bool IsMuted
+        {
+            get
+            {
+                return musicSource != null && musicSource.mute;
+            }
+        }
 
         public void PlaySound(AudioClip clip)
         {
@@ -37,8 +45,14 @@ namespace CardMatch.Audio
 
         public void SetMute(bool mute)
         {
-            if (musicSource != null) musicSource.mute = mute;
-            if (sfxSource != null) sfxSource.mute = mute;
+            if (musicSource != null)
+            {
+                musicSource.mute = mute;
+            }
+            if (sfxSource != null)
+            {
+                sfxSource.mute = mute;
+            }
         }
     }
 }

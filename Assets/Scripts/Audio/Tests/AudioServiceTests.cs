@@ -160,6 +160,20 @@ namespace CardMatch.Audio.Tests
             Assert.That(sfxSource.mute, Is.False);
         }
 
+        [Test]
+        public void IsMuted_WhenMuted_ReturnsTrue()
+        {
+            service.SetMute(true);
+            Assert.That(service.IsMuted, Is.True);
+        }
+
+        [Test]
+        public void IsMuted_WhenUnmuted_ReturnsFalse()
+        {
+            service.SetMute(false);
+            Assert.That(service.IsMuted, Is.False);
+        }
+
         private static void SetPrivateField(object target, string name, object value)
         {
             var field = target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
