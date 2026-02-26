@@ -3,6 +3,7 @@ using CardMatch.Audio;
 using CardMatch.CardMatch;
 using CardMatch.Navigation;
 using CardMatch.PlaySystem;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ namespace CardMatch.PlayView
         [SerializeField] private AudioService audioService;
         [SerializeField] private Board board;
         [SerializeField] private ScorePanel scorePanel;
-        [SerializeField] private GameObject gameEndPopup;
+        [SerializeField] private Button gameEndButton;
         [SerializeField] private Button returnButton;
         [SerializeField] private AudioClip gameOverClip;
 
@@ -76,21 +77,23 @@ namespace CardMatch.PlayView
 
         private void SetGameEndVisible(bool visible)
         {
-            if (gameEndPopup == null)
-            {
-                throw new Exception("Missing end game popup");
-            }
-            gameEndPopup.SetActive(visible);
+            gameEndButton.gameObject.SetActive(visible);
+            RectTransform buttonRect = gameEndButton.transform as RectTransform;
+            Vector2 anchoredPos = buttonRect.anchoredPosition;
+            Vector2 initialPos = anchoredPos - new Vector2(0, 300);
+            buttonRect.DOAnchorPos(anchoredPos, 0.3f).From(initialPos);
         }
 
         private void BindButtons()
         {
             returnButton.onClick.AddListener(HandleReturnClicked);
+            gameEndButton.onClick.AddListener(HandleReturnClicked);
         }
 
         private void UnbindButtons()
         {
             returnButton.onClick.RemoveListener(HandleReturnClicked);
+            gameEndButton.onClick.AddListener(HandleReturnClicked);
         }
 
         private void HandleReturnClicked()
