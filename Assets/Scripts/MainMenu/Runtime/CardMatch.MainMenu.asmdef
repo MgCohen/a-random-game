@@ -3,11 +3,15 @@
     "rootNamespace": "CardMatch.MainMenu",
     "references": [
         "UnityEngine.UI",
+        "CardMatch.Audio",
         "CardMatch.CardMatch",
-        "CardMatch.Navigation",
         "CardMatch.Levels",
-        "CardMatch.PlayView",
-        "CardMatch.Utility"
+        "CardMatch.Navigation",
+        "CardMatch.PlaySystem",
+        "CardMatch.Settings",
+        "CardMatch.Utility",
+        "External.DOTween",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

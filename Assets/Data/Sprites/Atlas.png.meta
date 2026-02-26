@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d8c4a520321c32499a64751d6d7899b
+guid: 385e1e6364e92834fbf23832d1dff6d7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,33 +105,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Frame 1 (6)_0
+      name: Frame 1 (7)_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 815
-        width: 443
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 60, y: 60, z: 60, w: 60}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a90e38f67314ff438be2dffe0191bb8
-      internalID: -427479203
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Frame 1 (6)_1
-      rect:
-        serializedVersion: 2
-        x: 20
-        y: 652
-        width: 126
+        x: 0
+        y: 884
+        width: 128
         height: 140
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -140,19 +119,61 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f68fba2acbd63d46939646e50937479
-      internalID: -83589836
+      spriteID: a67bc7d311fe6314996f9c247abd37fb
+      internalID: 1054271697
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_2
+      name: Frame 1 (7)_1
       rect:
         serializedVersion: 2
-        x: 172
-        y: 652
-        width: 126
+        x: 160
+        y: 792
+        width: 722
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b84eea94ff333ee4b99d241a39d5df81
+      internalID: 672420668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Frame 1 (7)_2
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 808
+        width: 722
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d269c64b9eda6d64ea18933844d3f9dd
+      internalID: -269697294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Option Button
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 720
+        width: 128
         height: 140
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -161,19 +182,61 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6dde284a01c67e46a221645944d62d5
-      internalID: 198934833
+      spriteID: ca1c1eb9cde63e243ae344ead9f4648e
+      internalID: -1754444422
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_3
+      name: Level Entry Container
       rect:
         serializedVersion: 2
-        x: 324
-        y: 664
-        width: 126
+        x: 160
+        y: 548
+        width: 722
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 67, z: 50, w: 50}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 416b725de6b939c42822395ae78d1424
+      internalID: -1416924386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Frame 1 (7)_5
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 596
+        width: 722
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb402c8e3d922d64ea1e3a609da6b768
+      internalID: 1899923466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Option Button Top
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 568
+        width: 128
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -182,20 +245,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eabfc482062ad7d4988bc03d6d4677ed
-      internalID: -1019320547
+      spriteID: 1875a1e492a2c9c4798b0233ede152dd
+      internalID: 1937982777
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_4
+      name: Frame 1 (7)_7
       rect:
         serializedVersion: 2
-        x: 476
-        y: 652
-        width: 126
-        height: 117
+        x: 898
+        y: 400
+        width: 722
+        height: 184
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,20 +266,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0eed1f495b65cf4e9212f1f8525172a
-      internalID: 753065230
+      spriteID: 73e21d3184ed8be4eba69259aa874620
+      internalID: 1866219887
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_5
+      name: Option Button Back
       rect:
         serializedVersion: 2
-        x: 20
-        y: 443
-        width: 163
-        height: 166
+        x: 0
+        y: 404
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -224,20 +287,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9be1cfabadb8df418b28c4620d53ea3
-      internalID: 1605104938
+      spriteID: 03eba3aef9ca9e442a85cd87b8dce4db
+      internalID: -720944634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_6
+      name: Level Entry Icon
       rect:
         serializedVersion: 2
-        x: 195
-        y: 443
-        width: 163
-        height: 166
+        x: 160
+        y: 444
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,20 +308,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 514fbae973aefc44590dd2f235dbd9f8
-      internalID: -330424980
+      spriteID: 9f31f540f0f34754b8bad190e308a63c
+      internalID: 1524439595
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_7
+      name: Frame 1 (7)_10
       rect:
         serializedVersion: 2
-        x: 382
-        y: 455
-        width: 140
-        height: 142
+        x: 288
+        y: 456
+        width: 128
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,20 +329,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6bdd511d7f737e4d841e6dc7c2e8112
-      internalID: 538910657
+      spriteID: f3b55d2934af74d4e8deb92819f1cedd
+      internalID: 348219959
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_8
+      name: Frame 1 (7)_11
       rect:
         serializedVersion: 2
-        x: 589
-        y: 499
-        width: 54
-        height: 54
+        x: 466
+        y: 336
+        width: 416
+        height: 200
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,20 +350,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cb24357c8913a674a9708649059be6fa
-      internalID: -940935082
+      spriteID: b515b29205d2db44ea2f0b68b170f906
+      internalID: -1225963566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_9
+      name: Frame 1 (7)_12
       rect:
         serializedVersion: 2
-        x: 23
-        y: 358
-        width: 55
-        height: 60
+        x: 184
+        y: 378
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -308,20 +371,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43b58bc1b21f9a545923a514ef2bec59
-      internalID: 1511854240
+      spriteID: 165ff52f1ace3844e8c531128b436366
+      internalID: -750787566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_10
+      name: Frame 1 (7)_13
       rect:
         serializedVersion: 2
-        x: 26
-        y: 322
-        width: 55
-        height: 7
+        x: 288
+        y: 362
+        width: 128
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -329,20 +392,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f66dc20f72a52f42b9e2827a4f32aac
-      internalID: 1939049986
+      spriteID: 6151c855f88f59544b08c36fef13d0f4
+      internalID: 558052395
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_11
+      name: Frame 1 (7)_14
       rect:
         serializedVersion: 2
-        x: 26
-        y: 282
-        width: 33
-        height: 32
+        x: 898
+        y: 204
+        width: 722
+        height: 184
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -350,20 +413,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a63b9b2fd4a1ff41a65fd42980bf59f
-      internalID: 1474313251
+      spriteID: d0ea972ee6dbb1e408877c1f69572ef2
+      internalID: 531720393
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_12
+      name: Frame 1 (7)_15
       rect:
         serializedVersion: 2
-        x: 62
-        y: 302
-        width: 19
-        height: 8
+        x: 0
+        y: 135
+        width: 169
+        height: 181
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -371,20 +434,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eeb28aeee6c04bd49b4daa9b5c3e7591
-      internalID: -253472664
+      spriteID: 26fe93ad473d6764198ca2bd8f14bc9f
+      internalID: -1255250429
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (6)_13
+      name: Frame 1 (7)_16
       rect:
         serializedVersion: 2
-        x: 63
-        y: 283
-        width: 18
-        height: 8
+        x: 184
+        y: 136
+        width: 168
+        height: 180
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -392,8 +455,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3dce5204189955a4cbc7643907c8d44a
-      internalID: -1502915094
+      spriteID: b688fbd57642453418dc0aa58602c1d7
+      internalID: -1752308547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Frame 1 (7)_17
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 124
+        width: 416
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0613548463fd0744acf5747c4b6914d
+      internalID: 1205950272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings
+      rect:
+        serializedVersion: 2
+        x: 1874
+        y: 882
+        width: 124
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f206fcb8ea408b46bdc2782e1c773a4
+      internalID: 359213221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Return
+      rect:
+        serializedVersion: 2
+        x: 1874
+        y: 701
+        width: 124
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c92d5721576a114599a3615a56821e5
+      internalID: -853097601
       vertices: []
       indices: 
       edges: []
@@ -409,20 +535,26 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Frame 1 (6)_0: -427479203
-      Frame 1 (6)_1: -83589836
-      Frame 1 (6)_10: 1939049986
-      Frame 1 (6)_11: 1474313251
-      Frame 1 (6)_12: -253472664
-      Frame 1 (6)_13: -1502915094
-      Frame 1 (6)_2: 198934833
-      Frame 1 (6)_3: -1019320547
-      Frame 1 (6)_4: 753065230
-      Frame 1 (6)_5: 1605104938
-      Frame 1 (6)_6: -330424980
-      Frame 1 (6)_7: 538910657
-      Frame 1 (6)_8: -940935082
-      Frame 1 (6)_9: 1511854240
+      Frame 1 (7)_0: 1054271697
+      Frame 1 (7)_1: 672420668
+      Frame 1 (7)_10: 348219959
+      Frame 1 (7)_11: -1225963566
+      Frame 1 (7)_12: -750787566
+      Frame 1 (7)_13: 558052395
+      Frame 1 (7)_14: 531720393
+      Frame 1 (7)_15: -1255250429
+      Frame 1 (7)_16: -1752308547
+      Frame 1 (7)_17: 1205950272
+      Frame 1 (7)_2: -269697294
+      Frame 1 (7)_5: 1899923466
+      Frame 1 (7)_7: 1866219887
+      Level Entry Container: -1416924386
+      Level Entry Icon: 1524439595
+      Option Button: -1754444422
+      Option Button Back: -720944634
+      Option Button Top: 1937982777
+      Return: -853097601
+      Settings: 359213221
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

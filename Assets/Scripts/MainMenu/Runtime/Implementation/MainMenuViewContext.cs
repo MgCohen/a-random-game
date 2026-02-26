@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using CardMatch.Audio;
 using CardMatch.CardMatch;
 using CardMatch.Levels;
 using CardMatch.Navigation;
-using CardMatch.PlayView;
+using CardMatch.PlaySystem;
+using CardMatch.Settings;
 
 namespace CardMatch.MainMenu
 {
@@ -10,14 +12,18 @@ namespace CardMatch.MainMenu
     {
         private readonly ILevelController levelController;
         private readonly INavigation navigation;
+        private readonly IPlaySystem playSystem;
+        private readonly IAudioService audioService;
         private Level selectedLevel;
 
         public Level SelectedLevel => selectedLevel;
 
-        public MainMenuViewContext(ILevelController levelController, INavigation navigation)
+        public MainMenuViewContext(ILevelController levelController, INavigation navigation, IPlaySystem playSystem, IAudioService audioService)
         {
             this.levelController = levelController;
             this.navigation = navigation;
+            this.playSystem = playSystem;
+            this.audioService = audioService;
         }
 
         public IReadOnlyList<MainMenuLevelEntry> GetLevelEntries()
@@ -43,16 +49,21 @@ namespace CardMatch.MainMenu
         {
             if (!CanSelect(level)) return;
             selectedLevel = level;
+            PlaySelected();
         }
 
         public void OnSettingsClicked()
         {
+            if (navigation == null || audioService == null) return;
+            var settingsContext = new SettingsViewContext(navigation, audioService);
+            navigation.Open(settingsContext);
         }
 
-        public void OnPlayClicked()
+        public void PlaySelected()
         {
-            if (navigation == null) return;
-            navigation.Open(new PlayViewContext(navigation));
+            if (playSystem == null) return;
+            if (selectedLevel == null) return;
+            playSystem.Play(selectedLevel);
         }
 
         private MainMenuLevelEntry CreateEntry(Level level)
