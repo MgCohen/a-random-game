@@ -15,8 +15,8 @@ MonoBehaviour:
   levelId: 3
   config:
     Layout:
-      Rows: 4
-      Columns: 4
+      Rows: 5
+      Columns: 2
     Scoring:
       BaseMatchPoints: 1
       ComboBonusPerLevel: 2
