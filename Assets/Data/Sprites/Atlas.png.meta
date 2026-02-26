@@ -399,11 +399,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (7)_15
+      name: Card Back
       rect:
         serializedVersion: 2
         x: 0
-        y: 135
+        y: 191
         width: 169
         height: 181
       alignment: 0
@@ -420,11 +420,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (7)_16
+      name: Card Front
       rect:
         serializedVersion: 2
-        x: 184
-        y: 136
+        x: 0
+        y: 6
         width: 168
         height: 180
       alignment: 0
@@ -524,6 +524,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Card Front no_shadow
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 18
+        width: 168
+        height: 168
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d913b40aa7894e94691426e5175970f2
+      internalID: 848683404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -536,12 +557,13 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Back: 1883213843
+      Card Back: -1255250429
+      Card Front: -1752308547
+      Card Front no_shadow: 848683404
       Frame 1 (7)_0: 1054271697
       Frame 1 (7)_1: 672420668
       Frame 1 (7)_11: -1225963566
       Frame 1 (7)_12: -750787566
-      Frame 1 (7)_15: -1255250429
-      Frame 1 (7)_16: -1752308547
       Frame 1 (7)_17: 1205950272
       Frame 1 (7)_2: -269697294
       Frame 1 (7)_5: 1899923466
