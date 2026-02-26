@@ -1,7 +1,7 @@
 {
     "name": "CardMatch.Audio",
     "rootNamespace": "CardMatch.Audio",
-    "references": ["UnityEngine"],
+    "references": ["UnityEngine","UnityEngine.UI","UnityEngine.InputLegacyModule"],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

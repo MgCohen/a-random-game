@@ -1,57 +1,96 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CardMatch.Audio
 {
     public class AudioService : MonoBehaviour, IAudioService
     {
-        [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private int maxConcurrentSounds = 5;
+
+        private List<AudioSource> _pool = new List<AudioSource>();
+
+        private void Awake()
+        {
+            CreatePool();
+        }
+
+        private void CreatePool()
+        {
+            if (sfxSource == null)
+                return;
+            SpawnPool();
+        }
+
+        private void SpawnPool()
+        {
+            int limit = Mathf.Max(1, maxConcurrentSounds);
+            _pool.Add(sfxSource);
+            for (int i = 1; i < limit; i++)
+            {
+                SpawnSource();
+            }
+        }
+
+        private void SpawnSource()
+        {
+            var source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.loop = false;
+            source.spatialBlend = sfxSource.spatialBlend;
+            source.volume = sfxSource.volume;
+            source.mute = sfxSource.mute;
+            source.outputAudioMixerGroup = sfxSource.outputAudioMixerGroup;
+            _pool.Add(source);
+        }
 
         public bool IsMuted
         {
             get
             {
-                return musicSource != null && musicSource.mute;
+                if (_pool == null || _pool.Count == 0)
+                    return sfxSource != null && sfxSource.mute;
+                return _pool[0].mute;
             }
         }
 
         public void PlaySound(AudioClip clip)
         {
-            if (clip != null && sfxSource != null)
-                sfxSource.PlayOneShot(clip);
+            if (clip == null)
+                return;
+            if (_pool == null || _pool.Count == 0)
+                return;
+            AudioSource availableSource = GetFirstAvailablePool();
+            if(availableSource == null)
+            {
+                return;
+            }
+            PlaySound(availableSource, clip);
         }
 
-        public void PlayMusic(AudioClip clip)
+        private AudioSource GetFirstAvailablePool()
         {
-            if (musicSource == null) return;
-            musicSource.Stop();
-            if (clip == null) return;
-            musicSource.clip = clip;
-            musicSource.loop = true;
-            musicSource.Play();
+            foreach (var source in _pool)
+            {
+                if (!source.isPlaying)
+                {
+                    return source;
+                }
+            }
+            return null;
         }
 
-        public void StopMusic()
+        private void PlaySound(AudioSource source, AudioClip clip)
         {
-            if (musicSource != null)
-                musicSource.Stop();
-        }
-
-        public void SetMusicVolume(float volume)
-        {
-            if (musicSource != null)
-                musicSource.volume = Mathf.Clamp01(volume);
+            source.clip = clip;
+            source.Play();
         }
 
         public void SetMute(bool mute)
         {
-            if (musicSource != null)
+            foreach(var source in _pool)
             {
-                musicSource.mute = mute;
-            }
-            if (sfxSource != null)
-            {
-                sfxSource.mute = mute;
+                source.mute = mute;
             }
         }
     }

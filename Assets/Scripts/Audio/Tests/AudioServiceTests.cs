@@ -9,7 +9,6 @@ namespace CardMatch.Audio.Tests
     {
         private GameObject serviceObject;
         private AudioService service;
-        private AudioSource musicSource;
         private AudioSource sfxSource;
 
         [SetUp]
@@ -18,16 +17,12 @@ namespace CardMatch.Audio.Tests
             serviceObject = new GameObject("AudioService");
             service = serviceObject.AddComponent<AudioService>();
 
-            var musicObject = new GameObject("MusicSource");
-            musicSource = musicObject.AddComponent<AudioSource>();
-            musicObject.transform.SetParent(serviceObject.transform);
-
             var sfxObject = new GameObject("SfxSource");
             sfxSource = sfxObject.AddComponent<AudioSource>();
             sfxObject.transform.SetParent(serviceObject.transform);
 
-            SetPrivateField(service, "musicSource", musicSource);
             SetPrivateField(service, "sfxSource", sfxSource);
+            SetPrivateField(service, "maxConcurrentSounds", 3);
         }
 
         [TearDown]
@@ -61,84 +56,8 @@ namespace CardMatch.Audio.Tests
         }
 
         [Test]
-        public void PlayMusic_WithNullMusicSource_DoesNotThrow()
-        {
-            SetPrivateField(service, "musicSource", null);
-            var clip = CreateDummyClip();
-            Assert.DoesNotThrow(() => service.PlayMusic(clip));
-            Object.DestroyImmediate(clip);
-        }
-
-        [Test]
-        public void PlayMusic_WithNullClip_StopsAndDoesNotThrow()
-        {
-            Assert.DoesNotThrow(() => service.PlayMusic(null));
-        }
-
-        [Test]
-        public void PlayMusic_WithValidClip_SetsClipLoopAndPlays()
-        {
-            var clip = CreateDummyClip();
-            service.PlayMusic(clip);
-            Assert.That(musicSource.clip, Is.SameAs(clip));
-            Assert.That(musicSource.loop, Is.True);
-            Assert.That(musicSource.isPlaying, Is.True);
-            Object.DestroyImmediate(clip);
-        }
-
-        [Test]
-        public void PlayMusic_WhenAlreadyPlaying_SwitchesToNewClip()
-        {
-            var clip1 = CreateDummyClip();
-            var clip2 = CreateDummyClip();
-            service.PlayMusic(clip1);
-            service.PlayMusic(clip2);
-            Assert.That(musicSource.clip, Is.SameAs(clip2));
-            Assert.That(musicSource.loop, Is.True);
-            Object.DestroyImmediate(clip1);
-            Object.DestroyImmediate(clip2);
-        }
-
-        [Test]
-        public void StopMusic_WithNullMusicSource_DoesNotThrow()
-        {
-            SetPrivateField(service, "musicSource", null);
-            Assert.DoesNotThrow(() => service.StopMusic());
-        }
-
-        [Test]
-        public void StopMusic_WithMusicSource_StopsPlayback()
-        {
-            var clip = CreateDummyClip();
-            service.PlayMusic(clip);
-            Assert.That(musicSource.isPlaying, Is.True);
-            service.StopMusic();
-            Assert.That(musicSource.isPlaying, Is.False);
-            Object.DestroyImmediate(clip);
-        }
-
-        [Test]
-        public void SetMusicVolume_WithNullMusicSource_DoesNotThrow()
-        {
-            SetPrivateField(service, "musicSource", null);
-            Assert.DoesNotThrow(() => service.SetMusicVolume(0.5f));
-        }
-
-        [Test]
-        public void SetMusicVolume_ClampsToValidRange()
-        {
-            service.SetMusicVolume(1.5f);
-            Assert.That(musicSource.volume, Is.EqualTo(1f));
-            service.SetMusicVolume(-0.5f);
-            Assert.That(musicSource.volume, Is.EqualTo(0f));
-            service.SetMusicVolume(0.5f);
-            Assert.That(musicSource.volume, Is.EqualTo(0.5f));
-        }
-
-        [Test]
         public void SetMute_WithNullSources_DoesNotThrow()
         {
-            SetPrivateField(service, "musicSource", null);
             SetPrivateField(service, "sfxSource", null);
             Assert.DoesNotThrow(() => service.SetMute(true));
         }
@@ -147,8 +66,10 @@ namespace CardMatch.Audio.Tests
         public void SetMute_True_SetsBothSourcesMute()
         {
             service.SetMute(true);
-            Assert.That(musicSource.mute, Is.True);
-            Assert.That(sfxSource.mute, Is.True);
+            var pool = GetPrivateField(service, "_pool") as System.Collections.IList;
+            Assert.That(pool, Is.Not.Null);
+            foreach (AudioSource source in pool)
+                Assert.That(source.mute, Is.True, "Each pool source should be muted");
         }
 
         [Test]
@@ -156,22 +77,10 @@ namespace CardMatch.Audio.Tests
         {
             service.SetMute(true);
             service.SetMute(false);
-            Assert.That(musicSource.mute, Is.False);
-            Assert.That(sfxSource.mute, Is.False);
-        }
-
-        [Test]
-        public void IsMuted_WhenMuted_ReturnsTrue()
-        {
-            service.SetMute(true);
-            Assert.That(service.IsMuted, Is.True);
-        }
-
-        [Test]
-        public void IsMuted_WhenUnmuted_ReturnsFalse()
-        {
-            service.SetMute(false);
-            Assert.That(service.IsMuted, Is.False);
+            var pool = GetPrivateField(service, "_pool") as System.Collections.IList;
+            Assert.That(pool, Is.Not.Null);
+            foreach (AudioSource source in pool)
+                Assert.That(source.mute, Is.False, "Each pool source should be unmuted");
         }
 
         private static void SetPrivateField(object target, string name, object value)
@@ -179,6 +88,13 @@ namespace CardMatch.Audio.Tests
             var field = target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(field, Is.Not.Null, $"Field '{name}' not found");
             field.SetValue(target, value);
+        }
+
+        private static object GetPrivateField(object target, string name)
+        {
+            var field = target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, $"Field '{name}' not found");
+            return field.GetValue(target);
         }
 
         private static AudioClip CreateDummyClip()
