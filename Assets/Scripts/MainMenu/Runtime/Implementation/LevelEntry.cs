@@ -1,3 +1,4 @@
+using CardMatch.Audio;
 using CardMatch.CardMatch;
 using System;
 using TMPro;
@@ -16,12 +17,15 @@ namespace CardMatch.MainMenu
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
 
-        public void Set(MainMenuLevelEntry entry, bool selectable, Action<MainMenuLevelEntry> onClick)
+        public void Set(MainMenuLevelEntry entry, bool selectable, Action<MainMenuLevelEntry> onClick, AudioService audioService)
         {
             this.entry = entry;
             this.onClick = onClick;
             SetButtonClick(selectable);
             SetLevelEntryLabel();
+            var soundPlayer = button != null ? button.GetComponent<ButtonSoundPlayer>() : null;
+            if (soundPlayer != null)
+                soundPlayer.SetAudioService(audioService);
         }
 
         private void SetLevelEntryLabel()

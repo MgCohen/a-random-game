@@ -1,28 +1,38 @@
+using CardMatch.Audio;
 using CardMatch.Navigation;
+using DG.Tweening;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace CardMatch.MainMenu
 {
     public class MainMenuView : View<MainMenuViewContext>
     {
+        [SerializeField] private AudioService audioService;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Transform levelListContent;
         [SerializeField] private LevelEntry levelEntryPrefab;
+        [SerializeField] private float entryRevealStagger = 0.05f;
+        [SerializeField] private float entryRevealDuration = 0.25f;
+        [SerializeField] private AudioClip spawnSound;
 
         private readonly List<LevelEntry> levelEntryButtons = new List<LevelEntry>();
 
         protected override void OnShow()
         {
             BindButtons();
+            if (levelEntryButtons.Count > 0)
+                return;
             RefreshLevelList();
         }
 
         protected override void OnHide()
+        {
+            UnbindButtons();
+        }
+
+        protected override void OnClose()
         {
             UnbindButtons();
             ClearLevelEntries();
@@ -46,15 +56,26 @@ namespace CardMatch.MainMenu
             for (int i = 0; i < entries.Count; i++)
             {
                 LevelEntry entry = CreateLevelEntryButton(entries[i]);
-                if (entry != null) levelEntryButtons.Add(entry);
+                if (entry == null) continue;
+                levelEntryButtons.Add(entry);
+                AnimateEntrySpawn(entry, i + 1);
             }
+        }
+
+        private void AnimateEntrySpawn(LevelEntry entry, int index)
+        {
+            entry.transform.localScale = Vector3.zero;
+            entry.transform.DOScale(Vector3.one, entryRevealDuration)
+                           .SetDelay(index * entryRevealStagger)
+                           .SetEase(Ease.OutBack)
+                           .OnStart(() => audioService.PlaySound(spawnSound));
         }
 
         private LevelEntry CreateLevelEntryButton(MainMenuLevelEntry entry)
         {
             LevelEntry instance = Instantiate(levelEntryPrefab, levelListContent);
             bool selectable = Context.CanSelect(entry.Level);
-            instance.Set(entry, selectable, HandleLevelSelected);
+            instance.Set(entry, selectable, HandleLevelSelected, audioService);
             return instance;
         }
 
@@ -64,6 +85,8 @@ namespace CardMatch.MainMenu
             {
                 if (entry != null)
                 {
+                    if (entry.transform is RectTransform rt)
+                        DOTween.Kill(rt);
                     Destroy(entry.gameObject);
                 }
             }

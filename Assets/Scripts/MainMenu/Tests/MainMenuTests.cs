@@ -193,10 +193,11 @@ namespace CardMatch.MainMenu.Tests
             public IView CurrentView => null;
             public IViewContext OpenedContext { get; private set; }
             public void GoBack() { }
-            public void Open<T>(T context) where T : IViewContext
+            public void Open<T>(T context, bool closeCurrent = false) where T : IViewContext
             {
                 OpenedContext = context;
             }
+            public void Focus(IView view) { }
         }
 
         private sealed class FakePlaySystem : IPlaySystem
@@ -216,6 +217,7 @@ namespace CardMatch.MainMenu.Tests
             {
                 IsMuted = mute;
             }
+            public void PlaySound(AudioClip clip) { }
         }
     }
 }
