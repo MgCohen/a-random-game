@@ -171,8 +171,15 @@ namespace CardMatch.PlayView
         private void KillCurrent()
         {
             if (_body != null) DOTween.Kill(_body);
+            if (_root != null) DOTween.Kill(_root);
+            if (_group != null) DOTween.Kill(_group);
             _currentTween = null;
             _animationQueue.Clear();
+        }
+
+        public void KillAllTweens()
+        {
+            KillCurrent();
         }
     }
 }

@@ -64,6 +64,8 @@ namespace CardMatch.PlayView
 
         private void CloseView()
         {
+            if (gameEndButton != null && gameEndButton.transform is RectTransform gameEndRect)
+                DOTween.Kill(gameEndRect, false);
             UnbindButtons();
             board.Close();
             scorePanel.Close();
@@ -81,7 +83,7 @@ namespace CardMatch.PlayView
             RectTransform buttonRect = gameEndButton.transform as RectTransform;
             Vector2 anchoredPos = buttonRect.anchoredPosition;
             Vector2 initialPos = anchoredPos - new Vector2(0, 300);
-            buttonRect.DOAnchorPos(anchoredPos, 0.3f).From(initialPos);
+            buttonRect.DOAnchorPos(anchoredPos, 0.3f).From(initialPos).SetTarget(buttonRect);
         }
 
         private void BindButtons()
@@ -93,7 +95,7 @@ namespace CardMatch.PlayView
         private void UnbindButtons()
         {
             returnButton.onClick.RemoveListener(HandleReturnClicked);
-            gameEndButton.onClick.AddListener(HandleReturnClicked);
+            gameEndButton.onClick.RemoveListener(HandleReturnClicked);
         }
 
         private void HandleReturnClicked()

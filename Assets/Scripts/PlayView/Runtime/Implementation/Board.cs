@@ -150,7 +150,12 @@ namespace CardMatch.PlayView
             foreach (BoardCardView v in cardViews.Values)
             {
                 if (v != null && v.gameObject != null)
+                {
+                    var animator = v.GetComponent<CardAnimator>();
+                    if (animator != null)
+                        animator.KillAllTweens();
                     Destroy(v.gameObject);
+                }
             }
             cardViews.Clear();
             _colorCache.Clear();
