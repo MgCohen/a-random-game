@@ -41,6 +41,7 @@ namespace CardMatch.CardMatch
             state.FlippedCards.Clear();
             state.Round += 1;
             events.Publish(new CardsMatched(first, second));
+            events.Publish(new RoundChanged(state.Round));
             UpdateCompletedState(state);
         }
 
@@ -49,7 +50,9 @@ namespace CardMatch.CardMatch
             SetCardStateAndDispatch(first, CardState.Hidden);
             SetCardStateAndDispatch(second, CardState.Hidden);
             state.FlippedCards.Clear();
+            state.Round += 1;
             events.Publish(new CardsMismatched(first, second));
+            events.Publish(new RoundChanged(state.Round));
         }
 
         protected virtual void SetCardStateAndDispatch(Card card, CardState newState)
@@ -77,9 +80,9 @@ namespace CardMatch.CardMatch
             {
                 return false;
             }
-            foreach (KeyValuePair<int, Card> pair in state.Cards)
+            foreach (Card card in state.Cards)
             {
-                if (pair.Value.State != CardState.Scored)
+                if (card.State != CardState.Scored)
                 {
                     return false;
                 }

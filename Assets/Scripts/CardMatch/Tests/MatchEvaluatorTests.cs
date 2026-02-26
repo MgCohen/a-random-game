@@ -53,8 +53,8 @@ namespace CardMatch.Tests
             Card first = new Card(7, CardState.Flipped);
             Card second = new Card(7, CardState.Flipped);
             var state = CreateStateWithFlipped(first, second);
-            state.Cards[0] = first;
-            state.Cards[1] = second;
+            state.Cards.Add(first);
+            state.Cards.Add(second);
             var events = new TypedEventService();
             var stateChangedEvents = new List<CardStateChanged>();
             CardsMatched matchedEvent = null;
@@ -82,8 +82,8 @@ namespace CardMatch.Tests
             Card first = new Card(5, CardState.Flipped);
             Card second = new Card(5, CardState.Flipped);
             var state = CreateStateWithFlipped(first, second);
-            state.Cards[0] = first;
-            state.Cards[1] = second;
+            state.Cards.Add(first);
+            state.Cards.Add(second);
             var events = new TypedEventService();
             var evaluator = new MatchEvaluator(events);
             evaluator.Evaluate(state);
@@ -98,10 +98,10 @@ namespace CardMatch.Tests
             Card third = new Card(2, CardState.Hidden);
             Card fourth = new Card(2, CardState.Hidden);
             var state = CreateStateWithFlipped(first, second);
-            state.Cards[0] = first;
-            state.Cards[1] = second;
-            state.Cards[2] = third;
-            state.Cards[3] = fourth;
+            state.Cards.Add(first);
+            state.Cards.Add(second);
+            state.Cards.Add(third);
+            state.Cards.Add(fourth);
             var events = new TypedEventService();
             var evaluator = new MatchEvaluator(events);
             evaluator.Evaluate(state);
@@ -117,13 +117,18 @@ namespace CardMatch.Tests
             var events = new TypedEventService();
             var stateChangedEvents = new List<CardStateChanged>();
             CardsMismatched mismatchedEvent = null;
+            RoundChanged roundChangedEvent = null;
             events.Subscribe<CardStateChanged>(e => stateChangedEvents.Add(e));
             events.Subscribe<CardsMismatched>(e => mismatchedEvent = e);
+            events.Subscribe<RoundChanged>(e => roundChangedEvent = e);
             var evaluator = new MatchEvaluator(events);
             evaluator.Evaluate(state);
             Assert.That(first.State, Is.EqualTo(CardState.Hidden));
             Assert.That(second.State, Is.EqualTo(CardState.Hidden));
             Assert.That(state.FlippedCards.Count, Is.EqualTo(0));
+            Assert.That(state.Round, Is.EqualTo(1));
+            Assert.That(roundChangedEvent, Is.Not.Null);
+            Assert.That(roundChangedEvent.Round, Is.EqualTo(1));
             Assert.That(stateChangedEvents.Count, Is.EqualTo(2));
             Assert.That(stateChangedEvents[0].Card, Is.SameAs(first));
             Assert.That(stateChangedEvents[0].State, Is.EqualTo(CardState.Hidden));
@@ -140,7 +145,7 @@ namespace CardMatch.Tests
             Card first = new Card(1, CardState.Scored);
             Card second = new Card(1, CardState.Scored);
             var state = new GameState();
-            state.Cards = new Dictionary<int, Card> { [0] = first, [1] = second };
+            state.Cards = new List<Card> { first, second };
             state.FlippedCards = new List<Card>();
             var events = new TypedEventService();
             var evaluator = new MatchEvaluator(events);
@@ -156,7 +161,7 @@ namespace CardMatch.Tests
                 flipped.Add(second);
             }
             var state = new GameState();
-            state.Cards = new Dictionary<int, Card>();
+            state.Cards = new List<Card>();
             state.FlippedCards = flipped;
             state.Round = 0;
             return state;

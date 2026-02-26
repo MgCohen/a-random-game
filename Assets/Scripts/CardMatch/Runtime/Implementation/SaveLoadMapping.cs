@@ -13,7 +13,7 @@ namespace CardMatch.CardMatch
             var state = new GameState { Layout = layout, Score = save.Score, Round = round, Combo = save.Combo };
             if (!HasValidArrays(save, count))
             {
-                state.Cards = new Dictionary<int, Card>();
+                state.Cards = new List<Card>();
                 state.FlippedCards = new List<Card>();
                 return state;
             }
@@ -24,7 +24,7 @@ namespace CardMatch.CardMatch
 
         public static GameSave ToSave(GameState state)
         {
-            int count = state.SlotCount;
+            int count = state.Layout.Rows * state.Layout.Columns;
             var pairIds = new int[count];
             var matched = new bool[count];
             FillSaveArrays(state, pairIds, matched, count);
@@ -61,25 +61,22 @@ namespace CardMatch.CardMatch
             return save.Matched.Length == count;
         }
 
-        private static Dictionary<int, Card> BuildCards(GameSave save, int count)
+        private static List<Card> BuildCards(GameSave save, int count)
         {
-            var cards = new Dictionary<int, Card>(count);
+            var cards = new List<Card>(count);
             for (int i = 0; i < count; i++)
             {
-                CardState state = save.Matched[i] ? CardState.Scored : CardState.Hidden;
-                cards[i] = new Card(save.PairIds[i], state);
+                CardState cardState = save.Matched[i] ? CardState.Scored : CardState.Hidden;
+                cards.Add(new Card(save.PairIds[i], cardState));
             }
             return cards;
         }
 
         private static void FillSaveArrays(GameState state, int[] pairIds, bool[] matched, int count)
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count && i < state.Cards.Count; i++)
             {
-                if (!state.Cards.TryGetValue(i, out Card card))
-                {
-                    continue;
-                }
+                Card card = state.Cards[i];
                 pairIds[i] = card.CardId;
                 matched[i] = card.State == CardState.Scored;
             }

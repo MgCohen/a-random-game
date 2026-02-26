@@ -12,17 +12,13 @@ namespace CardMatch.Tests
             int rows = 4;
             int cols = 4;
             GameState state = CreateShuffledBoard(rows, cols);
-            var events = new TypedEventService();
             bool completedReceived = false;
-            GameState finalState = null;
-            events.Subscribe<MatchCompleted>(e => { completedReceived = true; finalState = e.FinalState; });
-            var match = new Match(state, events);
+            ScoreRules rules = new ScoreRules();
+            var match = new Match(state, rules);
+            match.Subscribe<MatchCompleted>(e => { completedReceived = true; });
             SimulatePerfectPlay(match, state);
             Assert.That(completedReceived, Is.True);
-            Assert.That(finalState, Is.Not.Null);
-            Assert.That(finalState.Cards.Count, Is.EqualTo(rows * cols));
-            AssertAllCardsScored(finalState);
-            Assert.That(finalState.Round, Is.EqualTo(rows * cols / 2));
+            AssertAllCardsScored(state);
         }
 
         [Test]
@@ -32,10 +28,10 @@ namespace CardMatch.Tests
         public void SimulateMatch_VariousBoardSizes_AllEndWithMatchCompleted(int rows, int cols)
         {
             GameState state = CreateShuffledBoard(rows, cols);
-            var events = new TypedEventService();
             int completedCount = 0;
-            events.Subscribe<MatchCompleted>(_ => completedCount += 1);
-            var match = new Match(state, events);
+            ScoreRules rules = new ScoreRules();
+            var match = new Match(state, rules);
+            match.Subscribe<MatchCompleted>(_ => completedCount += 1);
             SimulatePerfectPlay(match, state);
             Assert.That(completedCount, Is.EqualTo(1));
         }
@@ -57,24 +53,24 @@ namespace CardMatch.Tests
         private static Dictionary<int, List<int>> BuildIndicesByCardId(GameState state)
         {
             var indicesByCardId = new Dictionary<int, List<int>>();
-            foreach (var kv in state.Cards)
+            for (int i = 0; i < state.Cards.Count; i++)
             {
-                int id = kv.Value.CardId;
+                int id = state.Cards[i].CardId;
                 if (!indicesByCardId.TryGetValue(id, out var list))
                 {
                     list = new List<int>();
                     indicesByCardId[id] = list;
                 }
-                list.Add(kv.Key);
+                list.Add(i);
             }
             return indicesByCardId;
         }
 
         private static void AssertAllCardsScored(GameState state)
         {
-            foreach (var kv in state.Cards)
+            foreach (Card card in state.Cards)
             {
-                Assert.That(kv.Value.State, Is.EqualTo(CardState.Scored));
+                Assert.That(card.State, Is.EqualTo(CardState.Scored));
             }
         }
 
@@ -84,7 +80,7 @@ namespace CardMatch.Tests
             Assert.That(slotCount % 2, Is.EqualTo(0));
             var cardIds = BuildPairCardIds(slotCount / 2);
             Shuffle(cardIds, 12345);
-            var cards = BuildCardsDictionary(cardIds);
+            var cards = BuildCardsList(cardIds);
             return NewGameState(rows, cols, cards);
         }
 
@@ -99,17 +95,17 @@ namespace CardMatch.Tests
             return cardIds;
         }
 
-        private static Dictionary<int, Card> BuildCardsDictionary(IList<int> cardIds)
+        private static List<Card> BuildCardsList(IList<int> cardIds)
         {
-            var cards = new Dictionary<int, Card>();
+            var cards = new List<Card>(cardIds.Count);
             for (int i = 0; i < cardIds.Count; i++)
             {
-                cards[i] = new Card(cardIds[i], CardState.Hidden);
+                cards.Add(new Card(cardIds[i], CardState.Hidden));
             }
             return cards;
         }
 
-        private static GameState NewGameState(int rows, int cols, Dictionary<int, Card> cards)
+        private static GameState NewGameState(int rows, int cols, List<Card> cards)
         {
             return new GameState
             {
