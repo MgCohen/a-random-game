@@ -1,0 +1,19 @@
+{
+    "name": "CardMatch.Settings",
+    "rootNamespace": "CardMatch.Settings",
+    "references": [
+        "UnityEngine",
+        "UnityEngine.UI",
+        "CardMatch.Navigation",
+        "CardMatch.Audio"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
