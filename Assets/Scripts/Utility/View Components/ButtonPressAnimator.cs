@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-/// <summary>Drop-on utility that animates a RectTransform (e.g. a button) with DOTween: slight Y-down on hover, press-down then pop on click.</summary>
 [RequireComponent(typeof(RectTransform))]
 public class ButtonPressAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -12,14 +11,18 @@ public class ButtonPressAnimator : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private float pressDuration = 0.05f;
     [SerializeField] private float popDuration = 0.15f;
 
-    private RectTransform _rect;
+    [SerializeField] private RectTransform _rect;
+
     private Vector2 _initialAnchoredPos;
     private bool _isHovered;
     private Tween _positionTween;
 
     private void Awake()
     {
-        _rect = GetComponent<RectTransform>();
+        if(_rect == null)
+        {
+            _rect = GetComponent<RectTransform>();
+        }
         _initialAnchoredPos = _rect.anchoredPosition;
     }
 
