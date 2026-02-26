@@ -114,8 +114,8 @@ namespace CardMatch.PlayView
                 _body.anchoredPosition -= dealStartOffset;
                 Sequence seq = DOTween.Sequence().SetTarget(_root);
                 seq.AppendInterval(UnityEngine.Random.value);
-                seq.Append(_group.DOFade(1, 0.25f));
-                seq.Join(_body.DOAnchorPos(startingPos, 0.25f));
+                seq.Append(_group.DOFade(1, dealDuration));
+                seq.Join(_body.DOAnchorPos(startingPos, dealDuration));
                 seq.JoinCallback(() => onDeal?.Invoke());
                 return seq;
             }, interruptAnimation);
