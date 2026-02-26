@@ -441,7 +441,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Frame 1 (7)_17
+      name: Turn Panel
       rect:
         serializedVersion: 2
         x: 466
@@ -564,7 +564,6 @@ TextureImporter:
       Frame 1 (7)_1: 672420668
       Frame 1 (7)_11: -1225963566
       Frame 1 (7)_12: -750787566
-      Frame 1 (7)_17: 1205950272
       Frame 1 (7)_2: -269697294
       Frame 1 (7)_5: 1899923466
       Level Entry Container: -1416924386
@@ -578,6 +577,7 @@ TextureImporter:
       Pink Container Back: 1866219887
       Return: -853097601
       Settings: 359213221
+      Turn Panel: 1205950272
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
