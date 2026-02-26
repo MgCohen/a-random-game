@@ -442,6 +442,7 @@ GameObject:
   - component: {fileID: 1843612931}
   - component: {fileID: 1843612930}
   - component: {fileID: 1843612929}
+  - component: {fileID: 6811908882031802957}
   m_Layer: 5
   m_Name: Body
   m_TagString: Untagged
@@ -559,6 +560,22 @@ MonoBehaviour:
   pressDuration: 0.05
   popDuration: 0.15
   _rect: {fileID: 499527298}
+--- !u!114 &6811908882031802957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843612927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b53b8c7749ec6e4f83b2339be4ec603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableClip: {fileID: 0}
+  hoverClip: {fileID: 8300000, guid: ac850130a2c732c49b075b207cff8a6c, type: 3}
+  clickClip: {fileID: 8300000, guid: 781534a81ffca9141b92116d31f584e0, type: 3}
+  audioService: {fileID: 0}
 --- !u!1 &1981562189
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,6 +711,7 @@ GameObject:
   - component: {fileID: 7714555156641406318}
   - component: {fileID: 5410625859012283094}
   - component: {fileID: 8611860311283737639}
+  - component: {fileID: 4203017608232125801}
   m_Layer: 5
   m_Name: Body
   m_TagString: Untagged
@@ -827,7 +845,23 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
+--- !u!114 &4203017608232125801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15813603347011597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d5fadcbd4aed54db8eaddfefca8e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverClip: {fileID: 8300000, guid: ac850130a2c732c49b075b207cff8a6c, type: 3}
+  toggleOnClip: {fileID: 8300000, guid: ac850130a2c732c49b075b207cff8a6c, type: 3}
+  toggleOffClip: {fileID: 0}
+  audioService: {fileID: 0}
 --- !u!1 &2705101290424783279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90079f35c8d9d24f906007bfe70022e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioService: {fileID: 0}
   muteButton: {fileID: 8611860311283737639}
   returnButton: {fileID: 1843612931}
 --- !u!1 &6324398219309246919

@@ -1,6 +1,7 @@
 using CardMatch.Audio;
 using CardMatch.Navigation;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace CardMatch.Settings.Tests
 {
@@ -20,8 +21,9 @@ namespace CardMatch.Settings.Tests
         {
             public int StackCount => 0;
             public IView CurrentView => null;
-            public void Open<T>(T context) where T : IViewContext { }
+            public void Open<T>(T context, bool closeCurrent = false) where T : IViewContext { }
             public void GoBack() { }
+            public void Focus(IView view) { }
         }
 
         private sealed class FakeAudioService : IAudioService
@@ -31,6 +33,7 @@ namespace CardMatch.Settings.Tests
             {
                 IsMuted = mute;
             }
+            public void PlaySound(AudioClip clip) { }
         }
     }
 }

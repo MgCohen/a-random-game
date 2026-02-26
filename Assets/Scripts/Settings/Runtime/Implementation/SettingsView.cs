@@ -7,6 +7,7 @@ namespace CardMatch.Settings
 {
     public class SettingsView : View<SettingsViewContext>
     {
+        [SerializeField] private AudioService audioService;
         [SerializeField] private Toggle muteButton;
         [SerializeField] private Button returnButton;
 
@@ -52,9 +53,8 @@ namespace CardMatch.Settings
 
         private void HandleMuteClicked(bool state)
         {
-            if (Context == null || Context.AudioService == null) return;
-            IAudioService audio = Context.AudioService;
-            audio.SetMute(state);
+            if (audioService == null) return;
+            audioService.SetMute(state);
             UpdateMuteButtonLabel();
         }
 
@@ -66,11 +66,10 @@ namespace CardMatch.Settings
 
         private void UpdateMuteButtonLabel()
         {
-            if (muteButton == null || Context == null || Context.AudioService == null) return;
+            if (muteButton == null || audioService == null) return;
             Text label = muteButton.GetComponentInChildren<Text>();
             if (label == null) return;
-            bool isMuted = Context.AudioService.IsMuted;
-            label.text = isMuted ? "Unmute" : "Mute";
+            label.text = audioService.IsMuted ? "Unmute" : "Mute";
         }
     }
 }
