@@ -173,6 +173,134 @@ namespace CardMatch.Navigation.Tests
             Assert.That(nav.CurrentView, Is.Null);
         }
 
+        [Test]
+        public void Open_WithCloseCurrentTrue_PopsAndClosesCurrent_StackCountStaysOne_NewViewOpen()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB(), closeCurrent: true);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewB));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Closed));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Open));
+        }
+
+        [Test]
+        public void Open_WithCloseCurrentTrue_WhenStackEmpty_BehavesLikeNormalOpen()
+        {
+            var viewA = new FakeViewA();
+            INavigation nav = new NavigationController(viewA);
+            nav.Open(new FakeContextA(), closeCurrent: true);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+        }
+
+        [Test]
+        public void GoBack_AfterOpenWithCloseCurrentTrue_RestoresPreviouslyClosedView()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB(), closeCurrent: true);
+            Assert.That(nav.CurrentView, Is.SameAs(viewB));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Closed));
+            nav.GoBack();
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Closed));
+        }
+
+        [Test]
+        public void Focus_WhenViewHidden_PopsAndClosesViewsAbove_ShowsFocusedView()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
+            nav.Focus(viewA);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Closed));
+        }
+
+        [Test]
+        public void Focus_WhenViewIsCurrent_DoesNothing()
+        {
+            var viewA = new FakeViewA();
+            INavigation nav = new NavigationController(viewA);
+            nav.Open(new FakeContextA());
+            nav.Focus(viewA);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+        }
+
+        [Test]
+        public void Focus_WhenViewNotInStack_DoesNothing_StackUnchanged()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Focus(viewB);
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Closed));
+        }
+
+        [Test]
+        public void Focus_OnView_CalledFromView_BringsViewToFront()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
+            viewA.RequestFocus();
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.Status, Is.EqualTo(ViewStatus.Open));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Closed));
+        }
+
+        [Test]
+        public void Open_WhenDestinationNotOnStack_CallsOpenNotFocus()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            Assert.That(viewA.OpenCallCount, Is.EqualTo(1));
+            Assert.That(viewA.FocusCallCount, Is.EqualTo(0));
+            nav.Open(new FakeContextB());
+            Assert.That(viewB.OpenCallCount, Is.EqualTo(1));
+            Assert.That(viewB.FocusCallCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Open_WhenDestinationOnStack_CallsFocusNotOpen()
+        {
+            var viewA = new FakeViewA();
+            var viewB = new FakeViewB();
+            INavigation nav = new NavigationController(viewA, viewB);
+            nav.Open(new FakeContextA());
+            nav.Open(new FakeContextB());
+            nav.Open(new FakeContextA());
+            Assert.That(nav.StackCount, Is.EqualTo(1));
+            Assert.That(nav.CurrentView, Is.SameAs(viewA));
+            Assert.That(viewA.OpenCallCount, Is.EqualTo(1));
+            Assert.That(viewA.FocusCallCount, Is.EqualTo(1));
+            Assert.That(viewB.Status, Is.EqualTo(ViewStatus.Closed));
+        }
+
         private sealed class FakeViewContext : IViewContext
         {
         }
@@ -183,9 +311,13 @@ namespace CardMatch.Navigation.Tests
 
         private abstract class FakeViewBase<TContext> : IView<TContext> where TContext : IViewContext
         {
+            private INavigation navigation;
+
             public ViewStatus Status { get; private set; } = ViewStatus.Closed;
             public Type ContextType => typeof(TContext);
             public TContext Context { get; private set; }
+            public int OpenCallCount { get; private set; }
+            public int FocusCallCount { get; private set; }
 
             public void SetContext(TContext context)
             {
@@ -199,6 +331,28 @@ namespace CardMatch.Navigation.Tests
                     throw new ArgumentException($"Expected context of type {typeof(TContext).Name}.");
                 }
                 SetContext(typedContext);
+            }
+
+            public void SetNavigation(INavigation navigation)
+            {
+                this.navigation = navigation;
+            }
+
+            public void Open()
+            {
+                Status = ViewStatus.Open;
+                OpenCallCount++;
+            }
+
+            public void Focus()
+            {
+                Status = ViewStatus.Open;
+                FocusCallCount++;
+            }
+
+            public void RequestFocus()
+            {
+                navigation?.Focus(this);
             }
 
             public void Show()

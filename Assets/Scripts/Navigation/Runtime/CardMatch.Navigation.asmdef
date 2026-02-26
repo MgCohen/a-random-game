@@ -2,7 +2,8 @@
     "name": "CardMatch.Navigation",
     "rootNamespace": "CardMatch.Navigation",
     "references": [
-        "UnityEngine"
+        "UnityEngine",
+        "CardMatch.Audio"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -4,7 +4,8 @@ namespace CardMatch.Navigation
     {
         int StackCount { get; }
         IView CurrentView { get; }
-        void Open<T>(T context) where T : IViewContext;
+        void Open<T>(T context, bool closeCurrent = false) where T : IViewContext;
         void GoBack();
+        void Focus(IView view);
     }
 }
