@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using CardMatch.CardMatch;
+using CardMatch.Audio;
 using CardMatch.Levels;
 using CardMatch.MainMenu;
 using CardMatch.Navigation;
 using CardMatch.Persistence;
+using CardMatch.PlaySystem;
+using Play = CardMatch.PlaySystem.PlaySystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace CardMatch.Bootstrap
 {
@@ -15,10 +13,15 @@ namespace CardMatch.Bootstrap
     {
         [SerializeField] private LevelRegistry levelRegistry;
         [SerializeField] private View[] views;
+        [SerializeField] private AudioService audioService;
+        [SerializeField] private AudioClip transitionClip;
 
         private IPersistence persistence;
         private INavigation navigation;
         private ILevelController levels;
+        private IPlaySystem playSystem;
+        private IPlayMatchFactory factory;
+
 
         private void Start()
         {
@@ -28,8 +31,10 @@ namespace CardMatch.Bootstrap
         public void Build()
         {
             persistence = new PlayerPrefsPersistence();
-            navigation = new NavigationController(views);
+            navigation = new NavigationController(audioService, transitionClip, views);
             levels = new LevelController(levelRegistry, persistence);
+            factory = new PlayMatchFactory();
+            playSystem = new Play(navigation, factory, levels);
             OpenInitialView();
         }
 
@@ -39,7 +44,8 @@ namespace CardMatch.Bootstrap
             {
                 return;
             }
-            var context = new MainMenuViewContext(levels, navigation);
+            IAudioService audio = audioService;
+            var context = new MainMenuViewContext(levels, navigation, playSystem, audio);
             navigation.Open(context);
         }
     }
