@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9106624728611699284}
   - component: {fileID: 3007403382488577560}
   - component: {fileID: 6807409050612706796}
+  - component: {fileID: 8662853102681204750}
   m_Layer: 5
   m_Name: Body
   m_TagString: Untagged
@@ -142,6 +143,23 @@ MonoBehaviour:
   hoverDuration: 0.1
   pressDuration: 0.05
   popDuration: 0.15
+  _rect: {fileID: 0}
+--- !u!114 &8662853102681204750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537574210059829047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b53b8c7749ec6e4f83b2339be4ec603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableClip: {fileID: 0}
+  hoverClip: {fileID: 8300000, guid: ac850130a2c732c49b075b207cff8a6c, type: 3}
+  clickClip: {fileID: 8300000, guid: 781534a81ffca9141b92116d31f584e0, type: 3}
+  audioService: {fileID: 0}
 --- !u!1 &3523172466518963861
 GameObject:
   m_ObjectHideFlags: 0

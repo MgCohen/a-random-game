@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 798423406}
   - component: {fileID: 798423410}
   - component: {fileID: 798423409}
+  - component: {fileID: 974793481}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -282,6 +283,22 @@ MonoBehaviour:
   pressDuration: 0.05
   popDuration: 0.15
   _rect: {fileID: 914254532}
+--- !u!114 &974793481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798423404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b53b8c7749ec6e4f83b2339be4ec603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableClip: {fileID: 0}
+  hoverClip: {fileID: 8300000, guid: ac850130a2c732c49b075b207cff8a6c, type: 3}
+  clickClip: {fileID: 8300000, guid: 781534a81ffca9141b92116d31f584e0, type: 3}
+  audioService: {fileID: 0}
 --- !u!1 &914254531
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7618864324101289659
 RectTransform:
   m_ObjectHideFlags: 0
@@ -676,6 +693,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2f4e51201f7504c8fbf3691f26cd9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioService: {fileID: 0}
   settingsButton: {fileID: 798423406}
   levelListContent: {fileID: 7618864323504498467}
   levelEntryPrefab: {fileID: 3523172466860704349, guid: 59d7e2eb66979474990110f0aef06a19, type: 3}
+  entryRevealStagger: 0.25
+  entryRevealDuration: 0.25
+  spawnSound: {fileID: 8300000, guid: 0e919041945d38348ba574dd0be348a1, type: 3}
