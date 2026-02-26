@@ -26,7 +26,6 @@ namespace CardMatch.PlayView
             new Color(0.9f, 0.5f, 0.9f),
             new Color(0.4f, 0.9f, 0.9f),
         };
-        [SerializeField] private float dealStaggerDelay = 0.05f;
 
         private Match match;
         private Dictionary<Card, BoardCardView> cardViews = new();
