@@ -2,14 +2,21 @@
     "name": "CardMatch.PlayView",
     "rootNamespace": "CardMatch.PlayView",
     "references": [
-        "UnityEngine",
-        "CardMatch.Navigation"
+        "UnityEngine.UI",
+        "CardMatch.Audio","CardMatch.Navigation",
+        "CardMatch.CardMatch",
+        "CardMatch.Levels",
+        "CardMatch.PlaySystem",
+        "External.DOTween",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "DOTween.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
